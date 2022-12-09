@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music-App</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+
+        </div>
+        <div class="content">
+            <div class="band-title-block">
+                <div class="band-title-bcg">
+                </div>
+                <div class="band-title">
+                </div>
+
+            </div>
+
+
+            <div class="play-list">
+            </div>
+        </div>
+    </div>
+
+    <footer class="bottom-player">
+
+
+        <div class="bottom-player__img-title">
+
+        </div>
+        <div class="player">
+            <div class="all-controls">
+                <div class="player-controls">
+                    <div class="play__range">
+                        <input class="play__range-el" type="range" value="0" step="any">
+
+                    </div>
+                    <div class="all-button">
+                        <div class="play__range-timing">
+                            <span class="currentTime"></span>
+                        </div>
+                        <div class="all-button__elements">
+                            <button class="play-prev player-icon">
+                                <img src="assets/imgs/player-rewind.svg" class="player-icon-el" alt="prev">
+                            </button>
+                            <button class="play player-icon">
+                                <img src="assets/imgs/player-play.svg" class="player-icon-el" alt="play">
+                            </button>
+                            <button class="pause player-icon">
+                                <img src="https://img.icons8.com/ios-glyphs/35/FFFFFF/pause--v1.png"
+                                    class="player-icon-el" alt="pause">
+                            </button>
+                            <button class="play-next player-icon">
+                                <img src="assets/imgs/player-forward.svg" class="player-icon-el" alt="next">
+                            </button>
+                        </div>
+                        <div class="play-list__duration"></div>
+                    </div>
+                </div>
+                <div class="volume-controls">
+                    <input class="volume-controls__range">
+                    <button class="mute player-icon"></button>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <script src="main.js"></script>
+</body>
+
+</html>
