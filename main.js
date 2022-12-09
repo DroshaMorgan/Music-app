@@ -100,15 +100,9 @@ const playListMain = [
         id: 10
     }
 ];
+
 let playList = [];
 playList = playListMain;
-
-// if (location.pathname === '/meditation.html') {
-//     playList = playListMeditation
-// }
-// else {
-//     
-// }
 
 const prevBtn = document.querySelector('.play-prev'),
     playBtn = document.querySelector('.play'),
@@ -120,8 +114,8 @@ const prevBtn = document.querySelector('.play-prev'),
     imgTitlePlayer = document.querySelector('.bottom-player__img-title'),
     bottomPlayer = document.querySelector('.bottom-player'),
 
-    bandTitleContent = document.querySelector('.band-title'),
-    bandContentBcg = document.querySelector('.band-title-bcg'),
+    bandTitleContent = document.querySelector('.band-title-block__el'),
+    bandContentBcg = document.querySelector('.band-title-block__bcg'),
 
     playListDuration = document.querySelector('.play-list__duration'),
     currentTimeEl = document.querySelector('.currentTime'),
@@ -133,13 +127,18 @@ const nextMusicListen = nextBtn.addEventListener('click', nextSong);
 const prevMusicListen = prevBtn.addEventListener('click', prevSong);
 
 let audio = new Audio(playList[0].src);
-audio.defaultMuted = false;
-audio.volume = 0.2;
+
 playBtn.addEventListener('click', () => audio.play());
 
+function pauseMusic() {
+    audio.pause();
+}
+
 bandTitleContent.innerHTML = `
-    <div class="band-title__img"><img class="band-title__img-el" src="${playList[0].img}" alt=""></div>
-        <div class="band-title__album-title">${playList[0].album}</div>
+    <div class="band-title-block__el__img">
+        <img class="band-title-block__el__img-el" src="${playList[0].img}" alt="">
+    </div>
+    <div class="band-title-block__el__album-title">${playList[0].album}</div>
     `;
 
 bandContentBcg.style = `
@@ -161,25 +160,21 @@ playList.forEach((sound) => {
     </div>`;
 });
 
-let items = audioList.querySelectorAll('.play-list__el')
-items.forEach(i => i.addEventListener('click', () => onSongClick(i.id)))
+let items = audioList.querySelectorAll('.play-list__el');
+items.forEach(i => i.addEventListener('click', () => onSongClick(i.id)));
 
 function onSongClick(id) {
     bottomPlayer.style = `
     visibility: visible;
     `;
 
-    let song = playList.find((el) => el.id == id)
-    Array.from(audioList.children).forEach((li) => li.classList.remove('active-song'));
-    audio.pause();
+    let song = playList.find((el) => el.id == id);
+    pauseMusic();
     audioList.children[id - 1].classList.add('active-song')
     audio = new Audio(song.src);
     audio.volume = volumeSlider.value;
     volumizer();
     audio.play();
-
-    // console.log(playList[id - 1].img);
-    // console.log(playList[id - 1].title);
 
     imgTitlePlayer.innerHTML = `
     <div class="play-list__img"><img class="play-list__img-el" src="${playList[id - 1].img}" alt=""></div>
@@ -190,57 +185,38 @@ function onSongClick(id) {
     <div class="play-list__duration">${playList[id - 1].duration}</div>
     `;
 
-    //тоже можно использовать song вместо id
+    function timeUpdateFoOnSong() {
+        audio.addEventListener('timeupdate', () => {
+            let currentTimeElNum = Math.trunc(audio.currentTime);
+            currentTimeEl.innerHTML = `
+                <div class="play__range-timing">
+                    <span class="currentTime">
+                    ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
+                    </span>
+                </div>
+                `;
 
+            playSlider.value = audio.currentTime / audio.duration * 100;
 
-    // let currentTimeElNum = Math.trunc(audio.currentTime);
-    audio.addEventListener('timeupdate', () => {
-        let currentTimeElNum = Math.trunc(audio.currentTime);
-        currentTimeEl.innerHTML = `
-            <div class="play__range-timing">
-                <span class="currentTime">
-                ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-                </span>
-            </div>
-            `;
-
-        playSlider.value = audio.currentTime / audio.duration * 100;
-
-        // console.log(Math.trunc(audio.currentTime));
-        // console.log(song.durationNum);
-
-        if (Math.trunc(audio.currentTime) == song.durationNum) {
-            nextSong();
-        }
-    });
-
-
-
-
-    // if (Math.trunc(audio.currentTime) == song.durationNum) {
-    //     nextSong();
-    // }
-
+            if (Math.trunc(audio.currentTime) == song.durationNum) {
+                nextSong();
+            }
+        });
+    }
+    timeUpdateFoOnSong();
 }
 
-function pauseMusic() {
-    audio.pause();
-}
+
 
 function nextSong() {
     const childrenArray = Array.from(audioList.children);
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
-    // let song = playList.find((el) => el.id == id)
+    pauseMusic();
 
-    audio.pause();
-    // if (!currentSongElement) {
-    //     // audio = new Audio(playList[0].src);
-    //     // audio.volume = volumeSlider.value;
-    //     // childrenArray[0].classList.add('active-song');
-    // } else {
     childrenArray.forEach((li) => li.classList.remove('active-song'));
     let currentId = currentSongElement.id;
+
     let songIndex = playList.findIndex((s) => s.id == Number.parseInt(currentId));
     if (songIndex < 0) {
         songIndex = 0;
@@ -249,15 +225,13 @@ function nextSong() {
     } else {
         songIndex++;
     }
+
     audio = new Audio(playList[songIndex].src);
     audio.volume = volumeSlider.value;
     childrenArray[songIndex].classList.add('active-song');
-    // }
 
     audio.play();
     volumizer();
-
-    // console.log(songIndex);
 
     imgTitlePlayer.innerHTML = `
     <div class="play-list__img"><img class="play-list__img-el" src="${playList[songIndex].img}" alt=""></div>
@@ -268,25 +242,25 @@ function nextSong() {
     <div class="play-list__duration">${playList[songIndex].duration}</div>
     `;
 
-    audio.addEventListener('timeupdate', () => {
-        let currentTimeElNum = Math.trunc(audio.currentTime);
-        currentTimeEl.innerHTML = `
-            <div class="play__range-timing">
-                <span class="currentTime">
-                ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-                </span>
-            </div>
-            `;
+    function timeUpdateFoNextPrevSong() {
+        audio.addEventListener('timeupdate', () => {
+            let currentTimeElNum = Math.trunc(audio.currentTime);
+            currentTimeEl.innerHTML = `
+                <div class="play__range-timing">
+                    <span class="currentTime">
+                    ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
+                    </span>
+                </div>
+                `;
 
-        playSlider.value = currentTimeElNum / audio.duration * 100;
+            playSlider.value = currentTimeElNum / audio.duration * 100;
 
-        console.log(Math.trunc(audio.currentTime));
-        console.log(playList[songIndex].durationNum);
-
-        if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
-            nextSong();
-        }
-    });
+            if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
+                nextSong();
+            }
+        })
+    }
+    timeUpdateFoNextPrevSong();
 }
 
 function prevSong() {
@@ -294,14 +268,12 @@ function prevSong() {
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
     audio.pause();
-    // if (!currentSongElement) {
-    //     // audio = new Audio(playList[playList.length - 1].src);
-    //     // audio.volume = volumeSlider.value;
-    //     // childrenArray[playList.length - 1].classList.add('active-song');
-    // } else {
+
     childrenArray.forEach((li) => li.classList.remove('active-song'));
     let currentId = currentSongElement.id;
+
     let songIndex = playList.findIndex((s) => s.id == Number.parseInt(currentId));
+
     if (songIndex < 0) {
         songIndex = playList.length - 1;
     } else if (songIndex == 0) {
@@ -309,13 +281,13 @@ function prevSong() {
     } else {
         songIndex--;
     }
+
     audio = new Audio(playList[songIndex].src);
     audio.volume = volumeSlider.value;
     childrenArray[songIndex].classList.add('active-song');
-    // }
+
     audio.play();
     volumizer();
-    // console.log(songIndex);
 
     imgTitlePlayer.innerHTML = `
     <div class="play-list__img"><img class="play-list__img-el" src="${playList[songIndex].img}" alt=""></div>
@@ -326,25 +298,25 @@ function prevSong() {
     <div class="play-list__duration">${playList[songIndex].duration}</div>
     `;
 
-    audio.addEventListener('timeupdate', () => {
-        let currentTimeElNum = Math.trunc(audio.currentTime);
-        currentTimeEl.innerHTML = `
-            <div class="play__range-timing">
-                <span class="currentTime">
-                ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-                </span>
-            </div>
-            `;
+    function timeUpdateFoNextPrevSong() {
+        audio.addEventListener('timeupdate', () => {
+            let currentTimeElNum = Math.trunc(audio.currentTime);
+            currentTimeEl.innerHTML = `
+                <div class="play__range-timing">
+                    <span class="currentTime">
+                    ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
+                    </span>
+                </div>
+                `;
 
-        playSlider.value = currentTimeElNum / audio.duration * 100;
+            playSlider.value = currentTimeElNum / audio.duration * 100;
 
-        console.log(Math.trunc(audio.currentTime));
-        console.log(playList[songIndex].durationNum);
-
-        if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
-            nextSong();
-        }
-    });
+            if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
+                nextSong();
+            }
+        })
+    }
+    timeUpdateFoNextPrevSong();
 }
 
 muteButton.addEventListener('click', muter);
@@ -359,53 +331,21 @@ function muter() {
     }
 }
 
-function setAttributes(el, attrs) {
-    for (var key in attrs) {
-        el.setAttribute(key, attrs[key]);
-    }
-}
-
-setAttributes(volumeSlider, { "type": "range", "min": "0", "max": "1", "step": "any", "value": "0.2" });
-volumeSlider.addEventListener("input", function () { audio.volume = volumeSlider.value; });
-
 audio.addEventListener('volumechange', volumizer);
 function volumizer() {
     if (audio.volume == 0) {
-
-        muteButton.style.backgroundImage = 'url(https://img.icons8.com/metro/35/FFFFFF/no-audio.png)'
+        muteButton.style.backgroundImage = 'url(https://img.icons8.com/metro/35/FFFFFF/no-audio.png)';
     }
     else {
-
-        muteButton.style.backgroundImage = 'url(https://img.icons8.com/sf-black-filled/35/FFFFFF/high-volume.png)'
+        muteButton.style.backgroundImage = 'url(https://img.icons8.com/sf-black-filled/35/FFFFFF/high-volume.png)';
     }
 }
 
+volumeSlider
+    .addEventListener('input', function () {
+        audio.volume = volumeSlider.value;
+    });
 
 playSlider.addEventListener('input', () => {
     audio.currentTime = playSlider.value / 100 * audio.duration;
 });
-
-audio.addEventListener('timeupdate', () => {
-    let currentTimeElNum = Math.trunc(audio.currentTime);
-    currentTimeEl.innerHTML = `
-        <div class="play__range-timing">
-            <span class="currentTime">
-            ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-            </span>
-        </div>
-        `;
-
-    playSlider.value = currentTimeElNum / audio.duration * 100;
-
-    console.log(Math.trunc(audio.currentTime));
-    console.log(playList[songIndex].durationNum);
-
-    if (Math.trunc(audio.currentTime) == currentSongElement.durationNum) {
-        nextSong();
-    }
-});
-
-// if (Math.trunc(audio.currentTime) == Math.trunc(audio.durationNum)) {
-
-// }
-

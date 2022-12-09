@@ -6,88 +6,62 @@
     top: 0;
     right: 0;
 
-    // display: grid;
-    // grid-template-columns: repeat(1, 255px);
-    // gap: 24px;
-    // padding: 20px 60px 120px;
     margin: auto;
     box-sizing: border-box;
 
     .band-title-block {
         height: 250px;
         position: relative;
-    }
 
-    .band-title {
-        padding: 20px 60px;
-        height: 100%;
-        // background: #39393d16;
-        box-sizing: border-box;
-        position: absolute;
-        top: 0;
-        display: flex;
-        // box-sizing: border-box;
-        align-items: center;
-
-        &-bcg {
+        &__bcg {
             height: 100%;
         }
 
-        &__img {
-            width: 100px;
-            height: 100px;
-            margin-right: 40px;
+        &__el {
+            padding: 20px 60px;
+            height: 100%;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
             display: flex;
             align-items: center;
 
-            &-el {
-                width: 100%;
+            &__img {
+                width: 100px;
+                height: 100px;
+                margin-right: 40px;
+                display: flex;
+                align-items: center;
 
+                &-el {
+                    width: 100%;
+                }
             }
-        }
 
-        &__album-title {
-            font-weight: 700;
-            font-size: 35px;
+            &__album-title {
+                font-weight: 700;
+                font-size: 35px;
+            }
         }
     }
 }
 
 .play-list {
-    // width: 100%;
     padding: 50px 60px 120px;
-    // text-align: left;
-    // list-style-type: none;
-    // display: grid;
-    // grid-template-columns: repeat(1, 100%);
-    // gap: 24px;
-
-    // color: #FCFCFC;
-    // font-family: Roboto, Arial, Helvetica, sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 24px;
 
-    // z-index: 10;
-
     &__el {
-
-        // z-index: 10;
         padding: 0 10px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 24px;
-        // width: 100%;
         height: 60px;
         cursor: pointer;
-        // display: flex;
-        // justify-content: space-between;
         align-items: center;
-        // margin-bottom: 15px;
         opacity: 0.9;
         transition: 0.2s;
-
-        // background: #fcfcfc02;
 
         &:hover {
             opacity: 1;

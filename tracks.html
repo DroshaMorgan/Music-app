@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music-App</title>
+    <title>Tracks</title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
@@ -13,17 +13,55 @@
 <body>
     <div class="container">
         <div class="sidebar">
+            <div class="sidebar__container">
 
-        </div>
-        <div class="content">
-            <div class="band-title-block">
-                <div class="band-title-bcg">
+                <div class="sidebar__top-link">
+                    <div class="sidebar__title">
+                        Music-App
+                    </div>
+                    <div class="sidebar__top-link-home-page">
+                        <a class="sidebar__links" href="#">Главная</a>
+                    </div>
+                    <div class="hr"></div>
                 </div>
-                <div class="band-title">
+                <div class="sidebar__middle-link">
+                    <div class="sidebar__middle-link-title">
+                        Моя коллекция
+                    </div>
+                    <div class="sidebar__link-block sidebar__middle-link-tracks">
+                        <img src="assets/imgs/tracks.svg" alt="" class="sidebar_link-img">
+                        <a href="#" class="sidebar__links">Треки</a>
+                    </div>
+                    <div class="sidebar__link-block sidebar__middle-link-albums">
+                        <img src="assets/imgs/albums.svg" alt="" class="sidebar_link-img">
+                        <a href="#" class="sidebar__links">Альбомы</a>
+                    </div>
+                    <div class="sidebar__link-block sidebar__middle-link-artists">
+                        <img src="assets/imgs/artists.svg" alt="" class="sidebar_link-img">
+                        <a href="#" class="sidebar__links">Исполнители</a>
+                    </div>
+                    <div class="hr"></div>
                 </div>
+                <div class="sidebar__bottom-link">
 
+                    <div class="sidebar__link-block sidebar__bottom-link-settings">
+                        <img src="assets/imgs/settings.svg" alt="" class="sidebar_link-img">
+                        <a href="#" class="sidebar__links">Настройки</a>
+                    </div>
+
+                    <div class="hr"></div>
+                </div>
             </div>
+        </div>
 
+        <div class="content">
+
+            <div class="band-title-block">
+                <div class="band-title-block__bcg">
+                </div>
+                <div class="band-title-block__el">
+                </div>
+            </div>
 
             <div class="play-list">
             </div>
@@ -32,12 +70,12 @@
 
     <footer class="bottom-player">
 
-
         <div class="bottom-player__img-title">
 
         </div>
+
         <div class="player">
-            <div class="all-controls">
+            <div class="player__all-controls">
                 <div class="player-controls">
                     <div class="play__range">
                         <input class="play__range-el" type="range" value="0" step="any">
@@ -66,13 +104,14 @@
                     </div>
                 </div>
                 <div class="volume-controls">
-                    <input class="volume-controls__range">
+                    <input class="volume-controls__range" type="range" , min="0" , max="1" , step="any" , value="0.2">
                     <button class="mute player-icon"></button>
                 </div>
             </div>
-
         </div>
+
     </footer>
+
     <script src="main.js"></script>
 </body>
 
