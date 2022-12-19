@@ -161,19 +161,21 @@ playList.forEach((sound) => {
 });
 
 let items = audioList.querySelectorAll('.play-list__el');
-items.forEach(i => i.addEventListener('click', () => onSongClick(i.id)));
+items.forEach(i => i.addEventListener('click', () => onSongClick(i.id, i)));
 
-function onSongClick(id) {
+function onSongClick(id, i) {
     bottomPlayer.style = `
     visibility: visible;
     `;
+
+    console.log(id, i);
 
     let song = playList.find((el) => el.id == id);
     pauseMusic();
     audioList.children[id - 1].classList.add('active-song')
     audio = new Audio(song.src);
     audio.volume = volumeSlider.value;
-    volumizer();
+    // volumizer();
     audio.play();
 
     imgTitlePlayer.innerHTML = `
@@ -331,15 +333,15 @@ function muter() {
     }
 }
 
-audio.addEventListener('volumechange', volumizer);
-function volumizer() {
-    if (audio.volume == 0) {
-        muteButton.style.backgroundImage = 'url(https://img.icons8.com/metro/35/FFFFFF/no-audio.png)';
-    }
-    else {
-        muteButton.style.backgroundImage = 'url(https://img.icons8.com/sf-black-filled/35/FFFFFF/high-volume.png)';
-    }
-}
+// audio.addEventListener('volumechange', volumizer);
+// function volumizer() {
+//     if (audio.volume == 0) {
+//         muteButton.style.backgroundImage = 'url(https://img.icons8.com/metro/35/FFFFFF/no-audio.png)';
+//     }
+//     else {
+//         muteButton.style.backgroundImage = 'url(https://img.icons8.com/sf-black-filled/35/FFFFFF/high-volume.png)';
+//     }
+// }
 
 volumeSlider
     .addEventListener('input', function () {

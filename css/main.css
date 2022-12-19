@@ -109,7 +109,7 @@ body {
 }
 .play-list__el:hover {
   opacity: 1;
-  background: rgba(252, 252, 252, 0.0823529412);
+  background: rgba(252, 252, 252, 0.1960784314);
 }
 .play-list__img {
   width: 65px;
@@ -132,8 +132,12 @@ body {
   justify-content: end;
 }
 
+.active-song {
+  opacity: 1;
+  background: rgba(252, 252, 252, 0.0823529412);
+}
+
 .bottom-player {
-  visibility: hidden;
   height: 100px;
   width: 100vw;
   position: fixed;
