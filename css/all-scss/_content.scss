@@ -18,13 +18,14 @@
         }
 
         &__el {
-            padding: 20px 60px;
+            padding: 40px 60px 20px;
             height: 100%;
             box-sizing: border-box;
             position: absolute;
             top: 0;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            justify-content: space-between;
 
             &__img {
                 width: 100px;
@@ -42,6 +43,12 @@
                 font-weight: 700;
                 font-size: 35px;
             }
+
+            // &__album-artist-name {
+            // }
+
+            // &__album-relise-date {
+            // }
         }
     }
 }
@@ -55,7 +62,7 @@
     &__el {
         padding: 0 10px;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 24px;
         height: 60px;
         cursor: pointer;
@@ -99,4 +106,38 @@
 .active-song {
     opacity: 1;
     background: #fcfcfc15;
+}
+
+.artists-block-all {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+
+    .artist-block-cart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.4s;
+    }
+}
+
+.albums-block-all {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+
+    .album-block-cart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.4s;
+    }
 }

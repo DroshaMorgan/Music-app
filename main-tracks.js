@@ -1,7 +1,11 @@
 const API_KEY = '2b8980ed887d86bafdfa74d28151b73b';
-const API_URL_TRACKS = 'https://api.jamendo.com/v3.0/albums/tracks/?client_id=e1ba0143&format=jsonpretty&limit=1&artist_name=we+are+fm';
+const API_URL_TRACKS = 'https://api.jamendo.com/v3.0/albums/tracks/?client_id=e1ba0143&format=jsonpretty&limit=1&name=';
+const API_URL_ALBUM = 'https://api.jamendo.com/v3.0/albums/?client_id=e1ba0143&format=jsonpretty&artist_name=';
+const API_URL_ARTISTS = 'https://api.jamendo.com/v3.0/artists/?client_id=e1ba0143&format=jsonpretty&name=';
 
 const API_URL_TRACKS_CHECK = 'https://api.jamendo.com/v3.0/albums/tracks/?client_id=e1ba0143&format=jsonpretty&limit=1&artist_name=we+are+fm';
+
+
 
 // playList = playListMain;
 
@@ -13,9 +17,9 @@ const prevBtn = document.querySelector('.play-prev'),
     bandTitleContent = document.querySelector('.band-title-block__el'),
     bandContentBcg = document.querySelector('.band-title-block__bcg'),
 
+    contentBlock = document.querySelector('.content'),
 
-
-    audioList = document.querySelector('.play-list'),
+    // audioList = document.querySelector('.play-list'),
     pleerDiv = document.querySelector('.player'),
 
     muteButton = document.querySelector('.mute'),
@@ -32,8 +36,79 @@ const playMusicListen = playBtn.addEventListener('click', playMusic);
 const pauseMusicListen = pauseBtn.addEventListener('click', pauseMusic);
 const nextMusicListen = nextBtn.addEventListener('click', nextSong);
 const prevMusicListen = prevBtn.addEventListener('click', prevSong);
-getMusic(API_URL_TRACKS);
 
+getArtists(API_URL_ARTISTS);
+
+async function getArtists(url) {
+    const respArt = await fetch(url);
+    const respDataArt = await respArt.json(); // БД в формате json
+
+    console.log(respDataArt.results);
+
+    renderArtists(respDataArt.results);
+    // renderBandTitleContent(respDataArt.results[0]);
+}
+
+function renderArtists(infoArtists) {
+    contentBlock.innerHTML = ``;
+    const allArtistsBlock = document.createElement('div');
+    allArtistsBlock.classList.add('artists-block-all');
+
+    contentBlock.appendChild(allArtistsBlock);
+    infoArtists.forEach((artist) => {
+        allArtistsBlock.innerHTML += `
+            <div class="artist-block-cart ${artist.name}" id="${artist.name}">
+            ${artist.image ? `<img class="artist-block-cart__img" width="100px" src="${artist.image}" alt="">` : `<img class="artist-block-cart__img" width="100px" src="assets/imgs/no-img-artist.jpg" alt=""> `}
+               
+               <div class="artist-block-cart__name">Исполнитель: ${artist.name}</div>
+            
+            </div>`;
+    });
+    const artistsBlock = contentBlock.querySelectorAll('.artist-block-cart');
+    artistsBlock
+        .forEach(i => i.addEventListener('click', () =>
+            // console.log(i.id)
+            getAlbums(i.id, API_URL_ALBUM)
+        ));
+}
+
+// getAlbum(artist_name, API_URL_ALBUM);
+
+async function getAlbums(artist_name, url) {
+    const respAlb = await fetch(url + artist_name);
+    const respDataAlb = await respAlb.json(); // БД в формате json
+
+    console.log(respDataAlb.results);
+    renderAlbums(respDataAlb.results);
+    // console.log(artist_name);
+    // renderTracks(respData.results[0].tracks, respData.results[0]);
+    // renderBandTitleContent(respData.results[0]);
+}
+
+function renderAlbums(infoAlbums) {
+    contentBlock.innerHTML = ``;
+    const allAlbumsBlock = document.createElement('div');
+    allAlbumsBlock.classList.add('albums-block-all');
+
+    contentBlock.appendChild(allAlbumsBlock);
+    infoAlbums.forEach((album) => {
+        // console.log(album);
+        allAlbumsBlock.innerHTML += `
+            <div class="album-block-cart ${album.artist_name}" id="${album.name}">
+                <img class="album-block-cart__img" width="100px" src="${album.image}" alt="">
+                <div class="play-list__title album-block-cart__artist-name">Исполнитель: ${album.artist_name}</div>
+                <div class="play-list__title album-block-cart__name">Альбом: ${album.name}</div>
+            </div>`;
+    });
+    const albumsBlock = contentBlock.querySelectorAll('.album-block-cart');
+    albumsBlock
+        .forEach(i => i.addEventListener('click', () =>
+            // console.log(i.id)
+            getMusic(i.id, API_URL_TRACKS)
+        ));
+}
+
+// getMusic(API_URL_TRACKS);
 audioPlay = new Audio();
 
 function pauseMusic() {
@@ -71,16 +146,21 @@ function timeUpdateFoOnSong() {
     });
 }
 
-async function getMusic(url) {
-    const resp = await fetch(url);
+async function getMusic(album_name, url) {
+    const resp = await fetch(url + album_name);
     respData = await resp.json(); // БД в формате json
+
+    console.log(respData);
 
     renderTracks(respData.results[0].tracks, respData.results[0]);
     renderBandTitleContent(respData.results[0]);
 }
 
 function renderTracks(tracks, infoAlbum) {
-    audioList.innerHTML = ``;
+    contentBlock.innerHTML = ``;
+    const audioList = document.createElement('div');
+    audioList.classList.add('play-list');
+    contentBlock.appendChild(audioList);
 
     tracks.sort((x, y) => x.position - y.position);
 
@@ -105,13 +185,27 @@ function renderTracks(tracks, infoAlbum) {
 }
 
 function renderBandTitleContent(infoAlbum) {
+    const bandTitleContentBlock = document.createElement('div');
+    bandTitleContentBlock.classList.add('band-title-block');
+    contentBlock.prepend(bandTitleContentBlock);
+
+    const bandContentBcg = document.createElement('div');
+    bandContentBcg.classList.add('band-title-block__bcg');
+    bandTitleContentBlock.appendChild(bandContentBcg);
+
+    const bandTitleContent = document.createElement('div');
+    bandTitleContent.classList.add('band-title-block__el');
+    bandTitleContentBlock.appendChild(bandTitleContent);
+
+
+
     bandTitleContent.innerHTML = `
         <div class="band-title-block__el__img">
             <img class="band-title-block__el__img-el" src="${infoAlbum.image}"  alt="">
         </div>
         <div class="band-title-block__el__album-title">${infoAlbum.name}</div>
-        <div class="band-title-block__el__album-artist-name"> ${infoAlbum.artist_name}</div>
-        <div class="band-title-block__el__album-relise-date"> ${infoAlbum.releasedate}</div>
+        <div class="band-title-block__el__album-artist-name">Исполнитель: ${infoAlbum.artist_name}</div>
+        <div class="band-title-block__el__album-relise-date">${infoAlbum.releasedate}</div>
         `;
 
     bandContentBcg.style = `
@@ -123,6 +217,8 @@ function renderBandTitleContent(infoAlbum) {
         `;
 }
 
+
+
 function onSongClick(position, tracks, infoAlbum) {
     bottomPlayer.style = `
     visibility: visible;
@@ -133,11 +229,11 @@ function onSongClick(position, tracks, infoAlbum) {
 
     pauseMusic();
 
+    const audioList = document.querySelector('.play-list');
     const audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements.forEach(el => el.classList.remove('active-song'));
 
     audioList.children[position - 1].classList.add('active-song');
-    // console.log(curentSong);
     audioPlay = new Audio(curentSong.audio);
     playMusic();
     audioPlay.volume = volumeSlider.value;
@@ -152,8 +248,6 @@ function onSongClick(position, tracks, infoAlbum) {
     playListDuration.innerHTML = `
     <div class="play-list__duration">${Math.trunc(curentSong.duration / 60)}:${curentSong.duration % 60}</div>
     `;
-    // console.log(audioPlay.currentTime);
-
     // function timeUpdateFoOnSong() {
     //     audioPlay.addEventListener('timeupdate', () => {
     //         const currentTimeElNum = Math.trunc(audioPlay.currentTime);
@@ -177,11 +271,12 @@ function onSongClick(position, tracks, infoAlbum) {
 
 function nextSong() {
     pauseMusic();
+    const audioList = document.querySelector('.play-list');
     const childrenArray = Array.from(audioList.children);
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
     let positionNumber = currentSongElement.getAttribute('position');
-    // console.log(respData.results[0].tracks);
+
 
     const audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements.forEach(el => el.classList.remove('active-song'));
@@ -221,11 +316,12 @@ function nextSong() {
 
 function prevSong() {
     pauseMusic();
-
+    const audioList = document.querySelector('.play-list');
     const childrenArray = Array.from(audioList.children);
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
     let positionNumber = currentSongElement.getAttribute('position');
+
 
     const audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements.forEach(el => el.classList.remove('active-song'));
@@ -243,7 +339,6 @@ function prevSong() {
 
     audioList.children[positionNumber - 1].classList.add('active-song');
 
-    console.log(curentSong);
     audioPlay = new Audio(curentSong.audio);
     audioPlay.play();
 
