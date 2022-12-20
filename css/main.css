@@ -138,6 +138,7 @@ body {
 }
 
 .bottom-player {
+  visibility: hidden;
   height: 100px;
   width: 100vw;
   position: fixed;

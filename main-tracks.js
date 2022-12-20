@@ -31,7 +31,7 @@ const prevBtn = document.querySelector('.play-prev'),
 const playMusicListen = playBtn.addEventListener('click', playMusic);
 const pauseMusicListen = pauseBtn.addEventListener('click', pauseMusic);
 const nextMusicListen = nextBtn.addEventListener('click', nextSong);
-// const prevMusicListen = prevBtn.addEventListener('click', prevSong);
+const prevMusicListen = prevBtn.addEventListener('click', prevSong);
 getMusic(API_URL_TRACKS);
 
 audioPlay = new Audio();
@@ -51,6 +51,25 @@ volumeSlider
 playSlider.addEventListener('input', () => {
     audioPlay.currentTime = playSlider.value / 100 * audioPlay.duration;
 });
+
+function timeUpdateFoOnSong() {
+    audioPlay.addEventListener('timeupdate', () => {
+        const currentTimeElNum = Math.trunc(audioPlay.currentTime);
+
+        currentTimeEl.innerHTML = `
+                <span class="currentTime">
+                ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
+                </span>
+            `;
+
+        playSlider.value = audioPlay.currentTime / audioPlay.duration * 100;
+        // console.log(audioPlay.duration);
+        if (Math.trunc(audioPlay.currentTime) == Math
+            .trunc(audioPlay.duration)) {
+            nextSong();
+        }
+    });
+}
 
 async function getMusic(url) {
     const resp = await fetch(url);
@@ -118,7 +137,7 @@ function onSongClick(position, tracks, infoAlbum) {
     audioListElements.forEach(el => el.classList.remove('active-song'));
 
     audioList.children[position - 1].classList.add('active-song');
-    console.log(curentSong);
+    // console.log(curentSong);
     audioPlay = new Audio(curentSong.audio);
     playMusic();
     audioPlay.volume = volumeSlider.value;
@@ -135,24 +154,24 @@ function onSongClick(position, tracks, infoAlbum) {
     `;
     // console.log(audioPlay.currentTime);
 
-    function timeUpdateFoOnSong() {
-        audioPlay.addEventListener('timeupdate', () => {
-            const currentTimeElNum = Math.trunc(audioPlay.currentTime);
+    // function timeUpdateFoOnSong() {
+    //     audioPlay.addEventListener('timeupdate', () => {
+    //         const currentTimeElNum = Math.trunc(audioPlay.currentTime);
 
-            currentTimeEl.innerHTML = `
-                    <span class="currentTime">
-                    ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-                    </span>
-                `;
+    //         currentTimeEl.innerHTML = `
+    //                 <span class="currentTime">
+    //                 ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
+    //                 </span>
+    //             `;
 
-            playSlider.value = audioPlay.currentTime / audioPlay.duration * 100;
-            // console.log(audioPlay.duration);
-            if (Math.trunc(audioPlay.currentTime) == Math
-                .trunc(audioPlay.duration)) {
-                nextSong();
-            }
-        });
-    }
+    //         playSlider.value = audioPlay.currentTime / audioPlay.duration * 100;
+    //         // console.log(audioPlay.duration);
+    //         if (Math.trunc(audioPlay.currentTime) == Math
+    //             .trunc(audioPlay.duration)) {
+    //             nextSong();
+    //         }
+    //     });
+    // }
     timeUpdateFoOnSong();
 }
 
@@ -161,13 +180,8 @@ function nextSong() {
     const childrenArray = Array.from(audioList.children);
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
-
     let positionNumber = currentSongElement.getAttribute('position');
-    // console.log(positionNumber);
-
     // console.log(respData.results[0].tracks);
-
-
 
     const audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements.forEach(el => el.classList.remove('active-song'));
@@ -180,105 +194,126 @@ function nextSong() {
         positionNumber++;
     }
 
-    const curentSongNext = respData.results[0].tracks
+    const curentSong = respData.results[0].tracks
         .find((el) => el.position === `${+positionNumber}`);
 
-    // console.log(positionNumber);
 
     audioList.children[positionNumber - 1].classList.add('active-song');
 
-    console.log(curentSongNext);
-    audioPlay = new Audio(curentSongNext.audio);
+    console.log(curentSong);
+    audioPlay = new Audio(curentSong.audio);
     audioPlay.play();
-    // playMusic();
-    // audioPlay.volume = volumeSlider.value;
-    // volumizer();
 
-    // imgTitlePlayer.innerHTML = `
-    // <div class="play-list__img"><img class="play-list__img-el" src="${playList[songIndex].img}" alt=""></div>
-    //     <div class="play-list__title">${playList[songIndex].title}</div>
-    // `;
+    audioPlay.volume = volumeSlider.value;
 
-    // playListDuration.innerHTML = `
-    // <div class="play-list__duration">${playList[songIndex].duration}</div>
-    // `;
+    imgTitlePlayer.innerHTML = `
+    <div class="play-list__img"><img class="play-list__img-el" src="
+    ${respData.results[0].image}" alt=""></div>
+        <div class="play-list__title">${curentSong.name}</div>
+    `;
 
-    // function timeUpdateFoNextPrevSong() {
-    //     audio.addEventListener('timeupdate', () => {
-    //         let currentTimeElNum = Math.trunc(audio.currentTime);
-    //         currentTimeEl.innerHTML = `
-    //             <div class="play__range-timing">
-    //                 <span class="currentTime">
-    //                 ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-    //                 </span>
-    //             </div>
-    //             `;
+    playListDuration.innerHTML = `
+    <div class="play-list__duration">${Math.trunc(curentSong.duration / 60)}:${curentSong.duration % 60}</div>
+    `;
 
-    //         playSlider.value = currentTimeElNum / audio.duration * 100;
-
-    //         if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
-    //             nextSong();
-    //         }
-    //     })
-    // }
-    // timeUpdateFoNextPrevSong();
+    timeUpdateFoOnSong();
 }
 
-// function prevSong() {
-//     const childrenArray = Array.from(audioList.children);
-//     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
+function prevSong() {
+    pauseMusic();
 
-//     audio.pause();
+    const childrenArray = Array.from(audioList.children);
+    const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
-//     childrenArray.forEach((li) => li.classList.remove('active-song'));
-//     let currentId = currentSongElement.id;
+    let positionNumber = currentSongElement.getAttribute('position');
 
-//     let songIndex = playList.findIndex((s) => s.id == Number.parseInt(currentId));
+    const audioListElements = audioList.querySelectorAll('.play-list__el');
+    audioListElements.forEach(el => el.classList.remove('active-song'));
 
-//     if (songIndex < 0) {
-//         songIndex = playList.length - 1;
-//     } else if (songIndex == 0) {
-//         songIndex = playList.length - 1;
-//     } else {
-//         songIndex--;
-//     }
+    if (positionNumber < 1) {
+        positionNumber = respData.results[0].tracks.length;
+    } else if (positionNumber == 1) {
+        positionNumber = respData.results[0].tracks.length;
+    } else {
+        positionNumber--;
+    }
 
-//     audio = new Audio(playList[songIndex].src);
-//     audio.volume = volumeSlider.value;
-//     childrenArray[songIndex].classList.add('active-song');
+    const curentSong = respData.results[0].tracks
+        .find((el) => el.position === `${+positionNumber}`);
 
-//     audio.play();
-//     volumizer();
+    audioList.children[positionNumber - 1].classList.add('active-song');
 
-//     imgTitlePlayer.innerHTML = `
-//     <div class="play-list__img"><img class="play-list__img-el" src="${playList[songIndex].img}" alt=""></div>
-//         <div class="play-list__title">${playList[songIndex].title}</div>
-//     `;
+    console.log(curentSong);
+    audioPlay = new Audio(curentSong.audio);
+    audioPlay.play();
 
-//     playListDuration.innerHTML = `
-//     <div class="play-list__duration">${playList[songIndex].duration}</div>
-//     `;
+    audioPlay.volume = volumeSlider.value;
 
-//     function timeUpdateFoNextPrevSong() {
-//         audio.addEventListener('timeupdate', () => {
-//             let currentTimeElNum = Math.trunc(audio.currentTime);
-//             currentTimeEl.innerHTML = `
-//                 <div class="play__range-timing">
-//                     <span class="currentTime">
-//                     ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-//                     </span>
-//                 </div>
-//                 `;
+    imgTitlePlayer.innerHTML = `
+    <div class="play-list__img"><img class="play-list__img-el" src="
+    ${respData.results[0].image}" alt=""></div>
+        <div class="play-list__title">${curentSong.name}</div>
+    `;
 
-//             playSlider.value = currentTimeElNum / audio.duration * 100;
+    playListDuration.innerHTML = `
+    <div class="play-list__duration">${Math.trunc(curentSong.duration / 60)}:${curentSong.duration % 60}</div>
+    `;
 
-//             if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
-//                 nextSong();
-//             }
-//         })
-//     }
-//     timeUpdateFoNextPrevSong();
-// }
+    timeUpdateFoOnSong();
+    //     const childrenArray = Array.from(audioList.children);
+    //     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
+
+    //     audio.pause();
+
+    //     childrenArray.forEach((li) => li.classList.remove('active-song'));
+    //     let currentId = currentSongElement.id;
+
+    //     let songIndex = playList.findIndex((s) => s.id == Number.parseInt(currentId));
+
+    //     if (songIndex < 0) {
+    //         songIndex = playList.length - 1;
+    //     } else if (songIndex == 0) {
+    //         songIndex = playList.length - 1;
+    //     } else {
+    //         songIndex--;
+    //     }
+
+    //     audio = new Audio(playList[songIndex].src);
+    //     audio.volume = volumeSlider.value;
+    //     childrenArray[songIndex].classList.add('active-song');
+
+    //     audio.play();
+    //     volumizer();
+
+    //     imgTitlePlayer.innerHTML = `
+    //     <div class="play-list__img"><img class="play-list__img-el" src="${playList[songIndex].img}" alt=""></div>
+    //         <div class="play-list__title">${playList[songIndex].title}</div>
+    //     `;
+
+    //     playListDuration.innerHTML = `
+    //     <div class="play-list__duration">${playList[songIndex].duration}</div>
+    //     `;
+
+    //     function timeUpdateFoNextPrevSong() {
+    //         audio.addEventListener('timeupdate', () => {
+    //             let currentTimeElNum = Math.trunc(audio.currentTime);
+    //             currentTimeEl.innerHTML = `
+    //                 <div class="play__range-timing">
+    //                     <span class="currentTime">
+    //                     ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
+    //                     </span>
+    //                 </div>
+    //                 `;
+
+    //             playSlider.value = currentTimeElNum / audio.duration * 100;
+
+    //             if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
+    //                 nextSong();
+    //             }
+    //         })
+    //     }
+    //     timeUpdateFoNextPrevSong();
+}
 
 // muteButton.addEventListener('click', muter);
 // function muter() {
