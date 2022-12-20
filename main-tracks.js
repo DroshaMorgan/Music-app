@@ -124,9 +124,9 @@ function renderBandTitleContent(infoAlbum) {
 }
 
 function onSongClick(position, tracks, infoAlbum) {
-    // bottomPlayer.style = `
-    // visibility: visible;
-    // `;
+    bottomPlayer.style = `
+    visibility: visible;
+    `;
 
     // console.log(position, tracks, infoAlbum);
     const curentSong = tracks.find((el) => el.position === position);
@@ -260,59 +260,6 @@ function prevSong() {
     `;
 
     timeUpdateFoOnSong();
-    //     const childrenArray = Array.from(audioList.children);
-    //     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
-
-    //     audio.pause();
-
-    //     childrenArray.forEach((li) => li.classList.remove('active-song'));
-    //     let currentId = currentSongElement.id;
-
-    //     let songIndex = playList.findIndex((s) => s.id == Number.parseInt(currentId));
-
-    //     if (songIndex < 0) {
-    //         songIndex = playList.length - 1;
-    //     } else if (songIndex == 0) {
-    //         songIndex = playList.length - 1;
-    //     } else {
-    //         songIndex--;
-    //     }
-
-    //     audio = new Audio(playList[songIndex].src);
-    //     audio.volume = volumeSlider.value;
-    //     childrenArray[songIndex].classList.add('active-song');
-
-    //     audio.play();
-    //     volumizer();
-
-    //     imgTitlePlayer.innerHTML = `
-    //     <div class="play-list__img"><img class="play-list__img-el" src="${playList[songIndex].img}" alt=""></div>
-    //         <div class="play-list__title">${playList[songIndex].title}</div>
-    //     `;
-
-    //     playListDuration.innerHTML = `
-    //     <div class="play-list__duration">${playList[songIndex].duration}</div>
-    //     `;
-
-    //     function timeUpdateFoNextPrevSong() {
-    //         audio.addEventListener('timeupdate', () => {
-    //             let currentTimeElNum = Math.trunc(audio.currentTime);
-    //             currentTimeEl.innerHTML = `
-    //                 <div class="play__range-timing">
-    //                     <span class="currentTime">
-    //                     ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-    //                     </span>
-    //                 </div>
-    //                 `;
-
-    //             playSlider.value = currentTimeElNum / audio.duration * 100;
-
-    //             if (Math.trunc(audio.currentTime) == playList[songIndex].durationNum) {
-    //                 nextSong();
-    //             }
-    //         })
-    //     }
-    //     timeUpdateFoNextPrevSong();
 }
 
 // muteButton.addEventListener('click', muter);
