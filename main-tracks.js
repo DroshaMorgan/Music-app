@@ -227,10 +227,10 @@ function renderBandTitleContent(infoAlbum) {
         `;
 
     bandContentBcg.style = `
-        background-image: url(${infoAlbum.image});
+        background-image: url(${infoAlbum.image}); 
         background-position: center;
         background-size: cover;
-        filter: blur(40px);
+        filter: blur(150px);
         height: 100%;
         `;
 }
