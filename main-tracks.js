@@ -43,7 +43,7 @@ async function getArtists(url) {
     const respArt = await fetch(url);
     const respDataArt = await respArt.json(); // БД в формате json
 
-    console.log(respDataArt.results);
+    console.log(respDataArt);
 
     renderArtists(respDataArt.results);
     // renderBandTitleContent(respDataArt.results[0]);
@@ -76,7 +76,7 @@ function renderArtists(infoArtists) {
 
 async function getAlbums(artist_name, url) {
     const respAlb = await fetch(url + artist_name);
-    const respDataAlb = await respAlb.json(); // БД в формате json
+    /*const */respDataAlb = await respAlb.json(); // БД в формате json
 
     console.log(respDataAlb.results);
     renderAlbums(respDataAlb.results);
@@ -93,6 +93,9 @@ function renderAlbums(infoAlbums) {
     contentBlock.appendChild(allAlbumsBlock);
     infoAlbums.forEach((album) => {
         // console.log(album);
+        // contentBlock.innerHTML += `
+        // <div>BACK</div>
+        //     `;
         allAlbumsBlock.innerHTML += `
             <div class="album-block-cart ${album.artist_name}" id="${album.name}">
                 <img class="album-block-cart__img" width="100px" src="${album.image}" alt="">
@@ -100,6 +103,11 @@ function renderAlbums(infoAlbums) {
                 <div class="play-list__title album-block-cart__name">Альбом: ${album.name}</div>
             </div>`;
     });
+    // const backLink = document.querySelector('.back_link');
+    // backLink.addEventListener('click', () => {
+
+    // });
+
     const albumsBlock = contentBlock.querySelectorAll('.album-block-cart');
     albumsBlock
         .forEach(i => i.addEventListener('click', () =>
@@ -168,7 +176,6 @@ function renderTracks(tracks, infoAlbum) {
         // const playListEl = document.createElement('div');
         // playListEl.classList.add('play-list__el');
         // playListEl.setAttribute('position', `${track.position}`);
-
         audioList.innerHTML += `
         <div class="play-list__el" position="${track.position}">
             <div class="play-list__title">${track.position}. ${track.name}</div>
@@ -178,6 +185,17 @@ function renderTracks(tracks, infoAlbum) {
         // audioList.appendChild(playListEl);
     });
 
+
+    const backLink = document.querySelector('.back_link');
+    backLink.style = `
+    display: inline;
+        `;
+    backLink.addEventListener('click', () => {
+        renderAlbums(respDataAlb.results);
+        backLink.style = `
+    display: none;
+        `;
+    });
 
     let audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements

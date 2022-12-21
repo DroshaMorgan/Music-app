@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="assets/imgs/icon-site.png" type="image/png">
-    <title>Tracks</title>
+    <title>Music-App</title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
@@ -29,17 +29,21 @@
                     <div class="sidebar__middle-link-title">
                         Моя коллекция
                     </div>
-                    <div class="sidebar__link-block sidebar__middle-link-tracks">
+                    <!-- <div class="sidebar__link-block sidebar__middle-link-tracks">
                         <img src="assets/imgs/tracks.svg" alt="" class="sidebar_link-img">
-                        <a href="tracks.html" class="sidebar__links">Треки</a>
+                        <a href="#" target="_blank" class="sidebar__links">Треки</a>
                     </div>
                     <div class="sidebar__link-block sidebar__middle-link-albums">
                         <img src="assets/imgs/albums.svg" alt="" class="sidebar_link-img">
                         <a href="#" class="sidebar__links">Альбомы</a>
-                    </div>
+                    </div> -->
                     <div class="sidebar__link-block sidebar__middle-link-artists">
                         <img src="assets/imgs/artists.svg" alt="" class="sidebar_link-img">
-                        <a href="#" class="sidebar__links">Исполнители</a>
+                        <a href="tracks.html" target="_blank" class="sidebar__links">Исполнители</a>
+                    </div>
+                    <div class="sidebar__link-block sidebar__middle-link-albums">
+                        <!-- <img src="assets/imgs/albums.svg" alt="" class="sidebar_link-img"> -->
+                        <a href="local-tracks.html" target="_blank" class="sidebar__links">Локальные файлы</a>
                     </div>
                     <div class="hr"></div>
                 </div>
@@ -57,63 +61,9 @@
 
         <div class="content">
 
-            <div class="band-title-block">
-                <div class="band-title-block__bcg">
-                </div>
-                <div class="band-title-block__el">
-                </div>
-            </div>
-
-            <div class="play-list">
-            </div>
         </div>
     </div>
-
-    <footer class="bottom-player">
-
-        <div class="bottom-player__img-title">
-
-        </div>
-
-        <div class="player">
-            <div class="player__all-controls">
-                <div class="player-controls">
-                    <div class="play__range">
-                        <input class="play__range-el" type="range" value="0" step="any">
-
-                    </div>
-                    <div class="all-button">
-                        <div class="play__range-timing">
-                            <span class="currentTime"></span>
-                        </div>
-                        <div class="all-button__elements">
-                            <button class="play-prev player-icon">
-                                <img src="assets/imgs/player-rewind.svg" class="player-icon-el" alt="prev">
-                            </button>
-                            <button class="play player-icon">
-                                <img src="assets/imgs/player-play.svg" class="player-icon-el" alt="play">
-                            </button>
-                            <button class="pause player-icon">
-                                <img src="https://img.icons8.com/ios-glyphs/35/FFFFFF/pause--v1.png"
-                                    class="player-icon-el" alt="pause">
-                            </button>
-                            <button class="play-next player-icon">
-                                <img src="assets/imgs/player-forward.svg" class="player-icon-el" alt="next">
-                            </button>
-                        </div>
-                        <div class="play-list__duration"></div>
-                    </div>
-                </div>
-                <div class="volume-controls">
-                    <input class="volume-controls__range" type="range" , min="0" , max="1" , step="any" , value="0.2">
-                    <button class="mute player-icon"></button>
-                </div>
-            </div>
-        </div>
-
-    </footer>
-
-    <script src="main.js"></script>
+    <script src="local-tracks.js"></script>
 </body>
 
 </html>

@@ -149,13 +149,15 @@ background-image: url(${playList[0].img});
     height: 100%;
 `;
 
+/* <div class="play-list__band">${sound.band}</div>
+        <div class="play-list__album">${sound.album}</div> */
+
 playList.forEach((sound) => {
     audioList
         .innerHTML += `
     <div class="play-list__el" id="${sound.id}">
         <div class="play-list__title">${sound.id}. ${sound.title}</div>
-        <div class="play-list__band">${sound.band}</div>
-        <div class="play-list__album">${sound.album}</div>
+        
         <div class="play-list__duration">${sound.duration}</div>
     </div>`;
 });
@@ -175,7 +177,7 @@ function onSongClick(id, i) {
     audioList.children[id - 1].classList.add('active-song')
     audio = new Audio(song.src);
     audio.volume = volumeSlider.value;
-    // volumizer();
+    volumizer();
     audio.play();
 
     imgTitlePlayer.innerHTML = `
@@ -333,15 +335,15 @@ function muter() {
     }
 }
 
-// audio.addEventListener('volumechange', volumizer);
-// function volumizer() {
-//     if (audio.volume == 0) {
-//         muteButton.style.backgroundImage = 'url(https://img.icons8.com/metro/35/FFFFFF/no-audio.png)';
-//     }
-//     else {
-//         muteButton.style.backgroundImage = 'url(https://img.icons8.com/sf-black-filled/35/FFFFFF/high-volume.png)';
-//     }
-// }
+audio.addEventListener('volumechange', volumizer);
+function volumizer() {
+    if (audio.volume == 0) {
+        muteButton.style.backgroundImage = 'url(https://img.icons8.com/metro/35/FFFFFF/no-audio.png)';
+    }
+    else {
+        muteButton.style.backgroundImage = 'url(https://img.icons8.com/sf-black-filled/35/FFFFFF/high-volume.png)';
+    }
+}
 
 volumeSlider
     .addEventListener('input', function () {

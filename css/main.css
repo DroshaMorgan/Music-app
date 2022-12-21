@@ -45,6 +45,9 @@ body {
   display: flex;
   margin-bottom: 10px;
 }
+.sidebar__link-block_local {
+  margin-top: 30px;
+}
 .sidebar__middle-link-title {
   margin-bottom: 20px;
 }
@@ -168,6 +171,11 @@ body {
   align-items: center;
   cursor: pointer;
   transition: 0.4s;
+}
+
+.back_link {
+  display: none;
+  cursor: pointer;
 }
 
 .bottom-player {
