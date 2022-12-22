@@ -94,6 +94,45 @@ body {
   font-size: 35px;
 }
 
+.main-bcg {
+  min-height: 100vh;
+  width: 100%;
+  background-image: url(../assets/imgs/main-bcg.jpg);
+  background-position: center;
+  background-size: cover;
+}
+.main-bcg__blackout {
+  min-height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.main-bcg__info-block {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 35px;
+}
+.main-bcg__info-block-top {
+  margin-bottom: 50px;
+}
+.main-bcg__info-block-middle {
+  margin-bottom: 30px;
+  font-size: 50px;
+  text-decoration: none;
+  color: #e1baff;
+  transition: 0.1s;
+}
+.main-bcg__info-block-middle:hover {
+  color: #d9a7ff;
+}
+.main-bcg__info-block-bottom {
+  font-weight: 400;
+  font-size: 20px;
+}
+
 .play-list {
   padding: 50px 60px 120px;
   font-weight: 500;
@@ -156,6 +195,13 @@ body {
   cursor: pointer;
   transition: 0.4s;
 }
+.artists-block-all .artist-block-cart:hover {
+  scale: 1.03;
+}
+.artists-block-all .artist-block-cart__img {
+  margin-bottom: 25px;
+  border-radius: 50%;
+}
 
 .albums-block-all {
   display: grid;
@@ -171,6 +217,13 @@ body {
   align-items: center;
   cursor: pointer;
   transition: 0.4s;
+}
+.albums-block-all .album-block-cart:hover {
+  scale: 1.05;
+}
+.albums-block-all .album-block-cart__img {
+  margin-bottom: 25px;
+  border-radius: 50%;
 }
 
 .back_link {
