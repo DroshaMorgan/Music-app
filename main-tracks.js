@@ -1,13 +1,8 @@
-const API_KEY = '2b8980ed887d86bafdfa74d28151b73b';
 const API_URL_TRACKS = 'https://api.jamendo.com/v3.0/albums/tracks/?client_id=e1ba0143&format=jsonpretty&limit=1&name=';
 const API_URL_ALBUM = 'https://api.jamendo.com/v3.0/albums/?client_id=e1ba0143&format=jsonpretty&artist_name=';
-const API_URL_ARTISTS = 'https://api.jamendo.com/v3.0/artists/?client_id=e1ba0143&format=jsonpretty&name=';
+const API_URL_ARTISTS = 'https://api.jamendo.com/v3.0/artists/?client_id=e1ba0143&format=jsonpretty&fullcount=true&limit=100&name=';
 
-const API_URL_TRACKS_CHECK = 'https://api.jamendo.com/v3.0/albums/tracks/?client_id=e1ba0143&format=jsonpretty&limit=1&artist_name=we+are+fm';
-
-
-
-// playList = playListMain;
+// const API_URL_TRACKS_CHECK = 'https://api.jamendo.com/v3.0/albums/tracks/?client_id=e1ba0143&format=jsonpretty&limit=1&artist_name=we+are+fm';
 
 const prevBtn = document.querySelector('.play-prev'),
     playBtn = document.querySelector('.play'),
@@ -18,14 +13,11 @@ const prevBtn = document.querySelector('.play-prev'),
     bandContentBcg = document.querySelector('.band-title-block__bcg'),
 
     contentBlock = document.querySelector('.content'),
-
-    // audioList = document.querySelector('.play-list'),
     pleerDiv = document.querySelector('.player'),
 
     muteButton = document.querySelector('.mute'),
     imgTitlePlayer = document.querySelector('.bottom-player__img-title'),
     bottomPlayer = document.querySelector('.bottom-player'),
-
 
     playListDuration = document.querySelector('.play-list__duration'),
     currentTimeEl = document.querySelector('.currentTime'),
@@ -43,10 +35,7 @@ async function getArtists(url) {
     const respArt = await fetch(url);
     const respDataArt = await respArt.json(); // БД в формате json
 
-    console.log(respDataArt);
-
     renderArtists(respDataArt.results);
-    // renderBandTitleContent(respDataArt.results[0]);
 }
 
 function renderArtists(infoArtists) {
@@ -67,46 +56,37 @@ function renderArtists(infoArtists) {
     const artistsBlock = contentBlock.querySelectorAll('.artist-block-cart');
     artistsBlock
         .forEach(i => i.addEventListener('click', () =>
-            // console.log(i.id)
             getAlbums(i.id, API_URL_ALBUM)
         ));
 }
-
-// getAlbum(artist_name, API_URL_ALBUM);
 
 async function getAlbums(artist_name, url) {
     const respAlb = await fetch(url + artist_name);
     /*const */respDataAlb = await respAlb.json(); // БД в формате json
 
-    console.log(respDataAlb.results);
     renderAlbums(respDataAlb.results);
-    // console.log(artist_name);
-    // renderTracks(respData.results[0].tracks, respData.results[0]);
-    // renderBandTitleContent(respData.results[0]);
 }
 
 function renderAlbums(infoAlbums) {
     contentBlock.innerHTML = ``;
     const allAlbumsBlock = document.createElement('div');
     allAlbumsBlock.classList.add('albums-block-all');
+    const allAlbumsBlockTitle = document.createElement('div');
+    allAlbumsBlockTitle.classList.add('albums-block-all__title');
 
+    contentBlock.appendChild(allAlbumsBlockTitle);
     contentBlock.appendChild(allAlbumsBlock);
     infoAlbums.forEach((album) => {
-        // console.log(album);
-        // contentBlock.innerHTML += `
-        // <div>BACK</div>
-        //     `;
         allAlbumsBlock.innerHTML += `
             <div class="album-block-cart ${album.artist_name}" id="${album.name}">
                 <img class="album-block-cart__img" width="100px" src="${album.image}" alt="">
-                <div class="play-list__title album-block-cart__artist-name">Исполнитель: ${album.artist_name}</div>
                 <div class="play-list__title album-block-cart__name">Альбом: ${album.name}</div>
             </div>`;
     });
-    // const backLink = document.querySelector('.back_link');
-    // backLink.addEventListener('click', () => {
 
-    // });
+    allAlbumsBlockTitle.innerHTML += `
+        Исполнитель: ${infoAlbums[0].artist_name}
+    `;
 
     const albumsBlock = contentBlock.querySelectorAll('.album-block-cart');
     albumsBlock
@@ -116,7 +96,6 @@ function renderAlbums(infoAlbums) {
         ));
 }
 
-// getMusic(API_URL_TRACKS);
 audioPlay = new Audio();
 
 function pauseMusic() {
@@ -146,7 +125,6 @@ function timeUpdateFoOnSong() {
             `;
 
         playSlider.value = audioPlay.currentTime / audioPlay.duration * 100;
-        // console.log(audioPlay.duration);
         if (Math.trunc(audioPlay.currentTime) == Math
             .trunc(audioPlay.duration)) {
             nextSong();
@@ -156,9 +134,7 @@ function timeUpdateFoOnSong() {
 
 async function getMusic(album_name, url) {
     const resp = await fetch(url + album_name);
-    respData = await resp.json(); // БД в формате json
-
-    console.log(respData);
+    respData = await resp.json();
 
     renderTracks(respData.results[0].tracks, respData.results[0]);
     renderBandTitleContent(respData.results[0]);
@@ -173,22 +149,16 @@ function renderTracks(tracks, infoAlbum) {
     tracks.sort((x, y) => x.position - y.position);
 
     tracks.forEach((track) => {
-        // const playListEl = document.createElement('div');
-        // playListEl.classList.add('play-list__el');
-        // playListEl.setAttribute('position', `${track.position}`);
         audioList.innerHTML += `
         <div class="play-list__el" position="${track.position}">
             <div class="play-list__title">${track.position}. ${track.name}</div>
             <div class="play-list__duration">${Math.trunc(track.duration / 60)}:${track.duration % 60}</div>
             </div>`;
-
-        // audioList.appendChild(playListEl);
     });
-
 
     const backLink = document.querySelector('.back_link');
     backLink.style = `
-    display: inline;
+    display: flex;
         `;
     backLink.addEventListener('click', () => {
         renderAlbums(respDataAlb.results);
@@ -215,8 +185,6 @@ function renderBandTitleContent(infoAlbum) {
     bandTitleContent.classList.add('band-title-block__el');
     bandTitleContentBlock.appendChild(bandTitleContent);
 
-
-
     bandTitleContent.innerHTML = `
         <div class="band-title-block__el__img">
             <img class="band-title-block__el__img-el" src="${infoAlbum.image}"  alt="">
@@ -235,16 +203,11 @@ function renderBandTitleContent(infoAlbum) {
         `;
 }
 
-
-
 function onSongClick(position, tracks, infoAlbum) {
     bottomPlayer.style = `
-    visibility: visible;
+    display: flex;
     `;
-
-    // console.log(position, tracks, infoAlbum);
     const curentSong = tracks.find((el) => el.position === position);
-
     pauseMusic();
 
     const audioList = document.querySelector('.play-list');
@@ -266,24 +229,6 @@ function onSongClick(position, tracks, infoAlbum) {
     playListDuration.innerHTML = `
     <div class="play-list__duration">${Math.trunc(curentSong.duration / 60)}:${curentSong.duration % 60}</div>
     `;
-    // function timeUpdateFoOnSong() {
-    //     audioPlay.addEventListener('timeupdate', () => {
-    //         const currentTimeElNum = Math.trunc(audioPlay.currentTime);
-
-    //         currentTimeEl.innerHTML = `
-    //                 <span class="currentTime">
-    //                 ${Math.trunc(currentTimeElNum / 60)}:${currentTimeElNum % 60}
-    //                 </span>
-    //             `;
-
-    //         playSlider.value = audioPlay.currentTime / audioPlay.duration * 100;
-    //         // console.log(audioPlay.duration);
-    //         if (Math.trunc(audioPlay.currentTime) == Math
-    //             .trunc(audioPlay.duration)) {
-    //             nextSong();
-    //         }
-    //     });
-    // }
     timeUpdateFoOnSong();
 }
 
@@ -294,7 +239,6 @@ function nextSong() {
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
     let positionNumber = currentSongElement.getAttribute('position');
-
 
     const audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements.forEach(el => el.classList.remove('active-song'));
@@ -310,10 +254,8 @@ function nextSong() {
     const curentSong = respData.results[0].tracks
         .find((el) => el.position === `${+positionNumber}`);
 
-
     audioList.children[positionNumber - 1].classList.add('active-song');
 
-    console.log(curentSong);
     audioPlay = new Audio(curentSong.audio);
     audioPlay.play();
 
@@ -328,7 +270,6 @@ function nextSong() {
     playListDuration.innerHTML = `
     <div class="play-list__duration">${Math.trunc(curentSong.duration / 60)}:${curentSong.duration % 60}</div>
     `;
-
     timeUpdateFoOnSong();
 }
 
@@ -339,7 +280,6 @@ function prevSong() {
     const currentSongElement = childrenArray.find(el => el.classList.contains('active-song'));
 
     let positionNumber = currentSongElement.getAttribute('position');
-
 
     const audioListElements = audioList.querySelectorAll('.play-list__el');
     audioListElements.forEach(el => el.classList.remove('active-song'));
@@ -371,7 +311,6 @@ function prevSong() {
     playListDuration.innerHTML = `
     <div class="play-list__duration">${Math.trunc(curentSong.duration / 60)}:${curentSong.duration % 60}</div>
     `;
-
     timeUpdateFoOnSong();
 }
 

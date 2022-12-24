@@ -1,5 +1,5 @@
 .bottom-player {
-    visibility: hidden;
+    // visibility: hidden;
 
     height: 100px;
     width: 100vw;
@@ -8,7 +8,7 @@
     background: #1F1F22;
 
     padding: 0 20px;
-    display: flex;
+    display: none;
 
     font-weight: 500;
     font-size: 18px;

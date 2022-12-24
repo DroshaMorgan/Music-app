@@ -167,14 +167,15 @@ items.forEach(i => i.addEventListener('click', () => onSongClick(i.id, i)));
 
 function onSongClick(id, i) {
     bottomPlayer.style = `
-    visibility: visible;
+    display: flex;
     `;
 
     console.log(id, i);
 
     let song = playList.find((el) => el.id == id);
     pauseMusic();
-    audioList.children[id - 1].classList.add('active-song')
+    items.forEach(el => el.classList.remove('active-song'));
+    audioList.children[id - 1].classList.add('active-song');
     audio = new Audio(song.src);
     audio.volume = volumeSlider.value;
     volumizer();
